@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ctfdb
+    username: ctf
+    password: ctfpass
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      "[hibernate.format_sql]": true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+
+app:
+  jwt:
+    secret: "change-this-in-prod-very-long-random"
+    expiration-minutes: 60
