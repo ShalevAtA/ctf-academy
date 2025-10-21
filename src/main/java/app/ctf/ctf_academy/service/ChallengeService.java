@@ -18,7 +18,7 @@ public class ChallengeService {
         this.challengeRepository = challengeRepository;
     }
 
-  public List<ChallengeOut> listPublishedClassic() {
+  public List<ChallengeOut> listPublished() {
         List<Challenge> entities = challengeRepository.findByPublishedTrueOrderByIdAsc();
         List<ChallengeOut> result = new ArrayList<>(entities.size());
         for (Challenge ch : entities) {
@@ -27,10 +27,21 @@ public class ChallengeService {
         return result;
     }
 
-    public SubmitRes submitFlag(SubmitReq req) {
-        Challenge challenge = challengeRepository.findBySlug(req.getSlug())
-                .orElseThrow(() -> new RuntimeException("coukldnt find challenge"));
-        boolean correct = challenge.getFlagStatic().equals(req.getFlag());
-        return new SubmitRes(correct, challenge.getPointsBase());
+public SubmitRes submitFlag(String slug, SubmitReq req) {
+    if (req == null || req.getFlag() == null) {
+        return new SubmitRes(false, null);
+    }
+    String submitted = req.getFlag().trim();
+    Challenge ch = challengeRepository.findBySlug(slug).orElseThrow();
+    boolean correct = submitted.equals(ch.getFlagStatic());
+    return correct
+            ? new SubmitRes(true, ch.getPointsBase())
+            : new SubmitRes(false, null);
+}
+
+
+    public Challenge getBySlug(String slug){
+         return challengeRepository.findBySlug(slug).get();
+        
     }
 }
