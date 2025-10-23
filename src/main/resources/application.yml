@@ -19,3 +19,10 @@ app:
   jwt:
     secret: "change-this-in-prod-very-long-random"
     expiration-minutes: 60
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
